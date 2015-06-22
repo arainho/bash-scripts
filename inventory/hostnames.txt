@@ -1,0 +1,5 @@
+server0.example.com
+server1.example.org
+server2.example.net
+db.example.net
+www.myexample.io
