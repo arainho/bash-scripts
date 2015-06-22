@@ -1,0 +1,6 @@
+server0.example.biz
+server1.example.biz
+server2.example.biz
+db2.myexample.net
+www.myexample.net
+mail.myexample.net
