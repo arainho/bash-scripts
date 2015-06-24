@@ -1,4 +1,5 @@
 #!/bin/bash
+# collect machine specs (hostname,cpu,ram,disk) and build a csv file
 
 FILE_INPUT="hostnames.txt"
 FILE_OUTPUT="machines_specs.csv"

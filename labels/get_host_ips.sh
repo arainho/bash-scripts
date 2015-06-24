@@ -1,4 +1,5 @@
 #!/bin/bash
+# collect machine ips based on dns and build a csv file
 
 CHECK_VALUE=""
 FILE_INPUT="hostnames.txt"

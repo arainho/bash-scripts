@@ -1,4 +1,5 @@
 #!/bin/bash
+# script to copy local directories to remote host
 
 REMOTE_HOST="remote-host.example.com"
 REMOTE_USER="remote-username"
