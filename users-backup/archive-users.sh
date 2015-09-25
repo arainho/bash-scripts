@@ -51,5 +51,5 @@ RSYNC_OPTIONS="-raxvH --links --numeric-ids"
 ## CHECK stuff
 
 	echo "just checking"
-	ssh ${REMOTE_USER}@${REMOTE_SERVER} ls ${REMOTE_MOUNT_POINT}
+	ssh ${REMOTE_USER}@${REMOTE_SERVER} "ls ${REMOTE_MOUNT_POINT}"
 
