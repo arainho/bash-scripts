@@ -1,5 +1,28 @@
-#!/bin/bash -x
+#!/bin/bash
 
+
+##############################################################################
+
+# |1|  add line to /etc/fstab
+# /dev/disk/by-id/usb-Kingston_DTR30G2_0018F30C0839BF11E1791227-0:0-part1         /media/kingston  ext2    noatime,nodiratime,errors=remount-ro  0       1
+
+# |2|  mount your device
+#
+# mount -a
+
+# |3|  add line to /etc/crontab
+#
+# 0 9     * * 6 root /opt/scripts/clone-2-kingston/clone-2-kingston-16g-weekly
+
+
+# |4|  download and run script to test if everything is ok
+#
+# mkdir -p /opt/scripts/clone-2-kingston/
+# cd /opt/scripts/clone-2-kingston || exit
+# wget https://raw.githubusercontent.com/arainho/bash-scripts/master/clone-2-kingston-16g-weekly
+# ./clone-2-kingston-16g-weekly
+
+##############################################################################
 USB_MOUNT_POINT="/media/kingston"
 KINGSTON_ID="0951:16a2"
 DISK_ID="0x00087602"
