@@ -3,6 +3,15 @@
 
 ##############################################################################
 
+# |0| using ext2 (no journal) to provide a longer life to usb-flash drive
+#
+# DEVICE="/dev/disk/by-id/usb-Kingston_DTR30G2_0018F30C0839BF11E1791227-0:0"
+# parted "${DEVICE}" mklabel msdos
+# parted "${DEVICE}" mkpart primary 1049KB 100%
+# parted "${DEVICE}" print
+# mkfs.ext2 "${DEVICE}"-part1
+
+
 # |1|  add line to /etc/fstab
 # /dev/disk/by-id/usb-Kingston_DTR30G2_0018F30C0839BF11E1791227-0:0-part1         /media/kingston  ext2    noatime,nodiratime,errors=remount-ro  0       1
 
