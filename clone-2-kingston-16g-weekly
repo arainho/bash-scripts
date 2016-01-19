@@ -1,0 +1,63 @@
+#!/bin/bash -x
+
+USB_MOUNT_POINT="/media/kingston"
+KINGSTON_ID="0951:16a2"
+DISK_ID="0x00087602"
+DEVICE="/dev/disk/by-id/usb-Kingston_DTR30G2_0018F30C0839BF11E1791227-0:0"
+ADMIN_MAIL="your-user@gmail.com"
+MY_HOSTNAME="$HOSTNAME"
+RSYNC_OPTIONS="-raAxXvH --links --numeric-ids --progress"
+EXCLUDE_FILE="/opt/scripts/clone-2-kingston/exclude-list.txt"
+
+CHECK_MOUNT_POINT=""
+DEVICE_PARTITION=""
+
+# change dir
+cd / || exit
+
+## Check Disk identifier: 0x00087602
+fdisk -l "${DEVICE}" | grep "${DISK_ID}"
+
+if [[ $? -ne 0 ]]; 
+then
+        echo "Device not found !"
+        echo "Disk identifier ${DISK_ID} not found !"
+        exit
+fi
+
+# check if kingston is mounted
+lsusb | grep "${KINGSTON_ID}" | grep Kingston
+
+
+if [[ $? -eq 0 ]]; then
+
+	echo "Kingston USB Device attached"
+	CHECK_MOUNT_POINT=$(mount | grep kingston | awk '{print $3}')
+	if [[ "$CHECK_MOUNT_POINT" == "$USB_MOUNT_POINT" ]]; then
+
+		echo
+		echo "usb device mounted at $CHECK_MOUNT_POINT"
+		echo "....................................."
+
+		echo "Start cloning $MY_HOSTNAME -to- Kingston USB"
+		echo
+        	echo "Cloning $(hostname) start at $(date)" | mail -e -s "Clone $MY_HOSTNAME starting ..." $ADMIN_MAIL
+		#rsync "${RSYNC_OPTIONS}" --exclude-from "${EXCLUDE_FILE}" / ${USB_MOUNT_POINT}/
+		rsync $RSYNC_OPTIONS --exclude-from $EXCLUDE_FILE / $USB_MOUNT_POINT/
+
+		if [ $? -eq 0 ]; then
+        		logger -s "Cloning $MY_HOSTNAME succeed :-)"    
+        		echo "Cloning $(hostname) succeed at $(date)" | mail -e -s "Cloning $MY_HOSTNAME succeed :-)" $ADMIN_MAIL
+		fi
+
+		if [ "$?" != "0" ]; then
+        		logger -s "$0 - Clone to Kingston USB failed"
+        		echo "Clone $(hostname) to Kingston USB failed at $(date)" | mail -e -s "Clone to Kingston USB failed :-(((" $ADMIN_MAIL
+		fi
+
+		# find device and install grub
+		DEVICE_PARTITION=$(mount | grep "$USB_MOUNT_POINT" | awk '{print $1}' | cut -d "1" -f1)
+		logger -s "Installing grub on $DEVICE_PARTITION"
+		grub-install --root-directory=$USB_MOUNT_POINT "$DEVICE_PARTITION"	
+	fi
+fi
